@@ -1,0 +1,29 @@
+[webservers]
+web1.example.com
+web2.example.com
+web3.example.com
+
+- name: Install Apache and configure website
+hosts: webservers
+become: true
+tasks:
+- name: Install Apache
+apt:
+name: apache2
+state: present
+- name: Copy website files
+copy:
+src: /path/to/website/files
+dest: /var/www/html
+- name: Configure Apache
+template:
+src: /path/to/apache/config
+dest: /etc/apache2/sites-enabled/website.conf
+notify: restart apache
+handlers:
+- name: restart apache
+service:
+name: apache2
+state: restarted
+
+ansible-playbook myplaybook.yml
